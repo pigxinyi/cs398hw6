@@ -5,6 +5,7 @@ from torch.autograd import Variable
 import torchvision
 import torchvision.transforms as transforms
 import numpy as np
+import hw6_2
 
 import matplotlib
 matplotlib.use('Agg')

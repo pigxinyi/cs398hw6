@@ -146,45 +146,6 @@ plt.close(fig)
 
 
 
-#############################################part 2 B#########
-
-model2 = torch.load('tempD.model')
-model2.cuda()
-model2.eval()
-
-X = X_batch.mean(dim=0)
-X = X.repeat(10,1,1,1)
-
-Y = torch.arange(10).type(torch.int64)
-Y = Variable(Y).cuda()
-
-lr = 0.1
-weight_decay = 0.001
-for i in xrange(200):
-    _, output = model2(X)
-
-    loss = -output[torch.arange(10).type(torch.int64),torch.arange(10).type(torch.int64)]
-    gradients = torch.autograd.grad(outputs=loss, inputs=X,
-                              grad_outputs=torch.ones(loss.size()).cuda(),
-                              create_graph=True, retain_graph=False, only_inputs=True)[0]
-
-    prediction = output.data.max(1)[1] # first column has actual prob.
-    accuracy = ( float( prediction.eq(Y.data).sum() ) /float(10.0))*100.0
-    print(i,accuracy,-loss)
-
-    X = X - lr*gradients.data - weight_decay*X.data*torch.abs(X.data)
-    X[X>1.0] = 1.0
-    X[X<-1.0] = -1.0
-
-## save new images
-samples = X.data.cpu().numpy()
-samples += 1.0
-samples /= 2.0
-samples = samples.transpose(0,2,3,1)
-
-fig = plot(samples)
-plt.savefig('visualization/max_class_discriminator_with_generator.png', bbox_inches='tight')
-plt.close(fig)
 
 
 
@@ -254,69 +215,4 @@ plt.close(fig)
 
 
 
-
-
-#############################################part 3 B#########
-X = X_batch.mean(dim=0)
-X = X.repeat(batch_size,1,1,1)
-
-Y = torch.arange(batch_size).type(torch.int64)
-Y = Variable(Y).cuda()
-
-lr = 0.1
-weight_decay = 0.001
-for i in xrange(200):
-    model2.set(layer=4)
-    output = model2(X)
-
-    loss = -output[torch.arange(batch_size).type(torch.int64),torch.arange(batch_size).type(torch.int64)]
-    gradients = torch.autograd.grad(outputs=loss, inputs=X,
-                              grad_outputs=torch.ones(loss.size()).cuda(),
-                              create_graph=True, retain_graph=False, only_inputs=True)[0]
-
-    prediction = output.data.max(1)[1] # first column has actual prob.
-    accuracy = ( float( prediction.eq(Y.data).sum() ) /float(batch_size))*100.0
-    print(i,accuracy,-loss)
-
-    X = X - lr*gradients.data - weight_decay*X.data*torch.abs(X.data)
-    X[X>1.0] = 1.0
-    X[X<-1.0] = -1.0
-
-## save new images
-samples = X.data.cpu().numpy()
-samples += 1.0
-samples /= 2.0
-samples = samples.transpose(0,2,3,1)
-
-fig = plot(samples[0:100])
-plt.savefig('visualization/max_features_discriminator_with_generator_4.png', bbox_inches='tight')
-plt.close(fig)
-
-
-for i in xrange(200):
-    model2.set(layer=8)
-    output = model2(X)
-
-    loss = -output[torch.arange(batch_size).type(torch.int64),torch.arange(batch_size).type(torch.int64)]
-    gradients = torch.autograd.grad(outputs=loss, inputs=X,
-                              grad_outputs=torch.ones(loss.size()).cuda(),
-                              create_graph=True, retain_graph=False, only_inputs=True)[0]
-
-    prediction = output.data.max(1)[1] # first column has actual prob.
-    accuracy = ( float( prediction.eq(Y.data).sum() ) /float(batch_size))*100.0
-    print(i,accuracy,-loss)
-
-    X = X - lr*gradients.data - weight_decay*X.data*torch.abs(X.data)
-    X[X>1.0] = 1.0
-    X[X<-1.0] = -1.0
-
-## save new images
-samples = X.data.cpu().numpy()
-samples += 1.0
-samples /= 2.0
-samples = samples.transpose(0,2,3,1)
-
-fig = plot(samples[0:100])
-plt.savefig('visualization/max_features_discriminator_with_generator_8.png', bbox_inches='tight')
-plt.close(fig)
 

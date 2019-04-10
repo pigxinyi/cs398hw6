@@ -32,7 +32,7 @@ transform_test = transforms.Compose([
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
 ])
 
-testset = torchvision.datasets.CIFAR10(root='./', train=False, download=False, transform=transform_test)
+testset = torchvision.datasets.CIFAR10(root='./', train=False, download=True, transform=transform_test)
 testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size, shuffle=False, num_workers=8)
 testloader = enumerate(testloader)
 

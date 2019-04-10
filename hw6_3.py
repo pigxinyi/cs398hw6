@@ -11,7 +11,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import os
-
+batch_size=128
 def plot(samples):
     fig = plt.figure(figsize=(10, 10))
     gs = gridspec.GridSpec(10, 10)

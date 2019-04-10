@@ -64,7 +64,7 @@ class discriminator(nn.Module):
             x = F.max_pool2d(x, kenel_size=4, stride=4)
             x = x.view(-1, 196)
             return x
-         else if self.extract_features == 4:
+     elif self.extract_features == 4:
             x = self.conv1( x )
             x = F.leaky_relu(self.layernorm1( x ))
             x = self.conv2( x )
@@ -77,7 +77,7 @@ class discriminator(nn.Module):
             x = F.max_pool2d(x, kernel_size=8, stride=8)
             x = x.view(-1, 196)
             return x
-         else:
+     else:
             x = self.conv1( x )
             x = F.leaky_relu(self.layernorm1( x ))
             x = self.conv2( x )

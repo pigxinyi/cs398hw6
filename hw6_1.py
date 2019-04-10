@@ -71,31 +71,69 @@ class discriminator(nn.Module):
 
         self.fc1 = nn.Linear(196, 1)
         self.fc10 = nn.Linear(196, 10)
-
-    def forward(self, x):
-        x = self.conv1( x )
-        x = F.leaky_relu(self.layernorm1( x ))
-        x = self.conv2( x )
-        x = F.leaky_relu(self.layernorm2( x ))
-        x = self.conv3( x )
-        x = F.leaky_relu(self.layernorm3( x ))
-        x = self.conv4( x )
-        x = F.leaky_relu(self.layernorm4( x ))
-        x = self.conv5( x )
-        x = F.leaky_relu(self.layernorm5( x ))
-        x = self.conv6( x )
-        x = F.leaky_relu(self.layernorm6( x ))
-        x = self.conv7( x )
-        x = F.leaky_relu(self.layernorm7( x ))
-        x = self.conv8( x )
-        x = F.leaky_relu(self.layernorm8( x ))
+   def set(self,layer=0):
+    self.extract_features =layer
+   def forward(self, x):
+        if self.extract_features == 8:
+            x = self.conv1( x )
+            x = F.leaky_relu(self.layernorm1( x ))
+            x = self.conv2( x )
+            x = F.leaky_relu(self.layernorm2( x ))
+            x = self.conv3( x )
+            x = F.leaky_relu(self.layernorm3( x ))
+            x = self.conv4( x )
+            x = F.leaky_relu(self.layernorm4( x ))
+            x = self.conv5( x )
+            x = F.leaky_relu(self.layernorm5( x ))
+            x = self.conv6( x )
+            x = F.leaky_relu(self.layernorm6( x ))
+            x = self.conv7( x )
+            x = F.leaky_relu(self.layernorm7( x ))
+            x = self.conv8( x )
+            x = F.leaky_relu(self.layernorm8( x ))
     
-        x = F.max_pool2d(x, kernel_size=4, stride=4)
+            x = F.max_pool2d(x, kenel_size=4, stride=4)
+            x = x.view(-1, 196)
+            return x
+
+       else if self.extract_features == 4:
+            x = self.conv1( x )
+            x = F.leaky_relu(self.layernorm1( x ))
+            x = self.conv2( x )
+            x = F.leaky_relu(self.layernorm2( x ))
+            x = self.conv3( x )
+            x = F.leaky_relu(self.layernorm3( x ))
+            x = self.conv4( x )
+            x = F.leaky_relu(self.layernorm4( x ))
+
+            x = F.max_pool2d(x, kernel_size=8, stride=8)
+            x = x.view(-1, 196)
+            return x
+        else:
+            x = self.conv1( x )
+            x = F.leaky_relu(self.layernorm1( x ))
+            x = self.conv2( x )
+            x = F.leaky_relu(self.layernorm2( x ))
+            x = self.conv3( x )
+            x = F.leaky_relu(self.layernorm3( x ))
+            x = self.conv4( x )
+            x = F.leaky_relu(self.layernorm4( x ))
+            x = self.conv5( x )
+            x = F.leaky_relu(self.layernorm5( x ))
+            x = self.conv6( x )
+            x = F.leaky_relu(self.layernorm6( x ))
+            x = self.conv7( x )
+            x = F.leaky_relu(self.layernorm7( x ))
+            x = self.conv8( x )
+            x = F.leaky_relu(self.layernorm8( x ))
         
-        x = x.view(x.size(0), -1)
-        fc1_x = self.fc1(x)
-        fc10_x = self.fc10(x)
-        return fc1_x, fc10_x
+            x = F.max_pool2d(x, kernel_size=4, stride=4)
+            
+            x = x.view(x.size(0), -1)
+            fc1_x = self.fc1(x)
+            fc10_x = self.fc10(x)
+            return fc1_x, fc10_x
+
 
 model =  discriminator()
 model.cuda()
